@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PuzzleCam</title>
+  <meta name="description"
+    content="Aplikasi Photobooth interaktif berbasis gestur tangan AI tanpa sentuh, dipecah menjadi puzzle 3x3 dan dapat diunduh sebagai strip foto." />
+
+  <!-- Google Fonts: Inter & IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+  <div id="app">
+
+    <div id="stage">
+      <video id="webcam" playsinline autoplay muted></video>
+      <canvas id="sceneCanvas"></canvas>
+
+      <div class="hud-top">
+        <div class="brand"><small>UKM IT 2026</small></div>
+        <div class="status-pill">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText">memulai kamera…</span>
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Cepat / Fallback UX -->
+      <div class="stage-controls" id="stageControls">
+        <button type="button" id="snapPhotoBtn" class="stage-btn stage-btn--primary">
+          Ambil Foto (Pose V)
+        </button>
+        <button type="button" id="autoSolveBtn" class="stage-btn stage-btn--hint hidden">
+          Bantuan Penyelesaian
+        </button>
+        <button type="button" id="savePuzzleBtn" class="stage-btn stage-btn--success hidden">
+          Simpan Foto
+        </button>
+      </div>
+
+      <div id="progressBadge" class="progress-badge">
+        <span id="progressText">0 / 9 keping terpasang</span>
+      </div>
+
+      <!-- Panduan Gestur HUD Bawah -->
+      <div class="hud-bottom">
+        <div class="gesture-key">
+          <div class="item">
+            <span class="swatch pinch"></span>
+            <span>Pose V: Ambil Foto</span>
+          </div>
+          <div class="item">
+            <span class="swatch drag"></span>
+            <span>Cubit Ibu Jari + Telunjuk: Geser Kepingan</span>
+          </div>
+          <div class="item">
+            <span class="swatch fist"></span>
+            <span>Kepalkan Tangan / Klik: Simpan Foto</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingOverlay">
+        <div class="loader-text" id="loaderText">Memuat model AI…</div>
+        <div class="loader-bar"></div>
+        <button type="button" id="loaderRetry" class="loader-retry hidden">Coba Lagi</button>
+      </div>
+
+      <div id="errorBanner"></div>
+    </div>
+
+    <aside id="gallery">
+      <div class="gallery-head">
+        <span class="gallery-title">Strip Foto</span>
+        <span class="gallery-count" id="galleryCount">0 / 3</span>
+      </div>
+
+      <div class="strip-complete-msg" id="stripCompleteMsg">
+        Maksimal 3 foto tercapai. Unduh strip, lalu Reset untuk memulai sesi baru.
+      </div>
+
+      <div id="galleryStrip" class="gallery-strip">
+        <div class="gallery-empty" id="galleryEmpty">
+          Foto puzzle yang terselesaikan akan tersimpan di sini.
+        </div>
+      </div>
+
+      <div class="gallery-actions">
+        <button type="button" id="downloadStripBtn" class="gallery-action-btn" disabled>Unduh Strip Foto</button>
+        <button type="button" id="resetAllBtn" class="gallery-action-btn gallery-action-btn--danger">Reset</button>
+      </div>
+    </aside>
+
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+
+</html>
