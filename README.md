@@ -1,4 +1,4 @@
-# PuzzleCam — Game Photobooth Gestur Tangan (UKM IT 2026)
+# PuzzleCam — Game Photobooth Gestur Tangan
 
 Aplikasi web *photobooth* dan puzzle interaktif berbasis **AI Hand Gesture Recognition** yang berjalan 100% di browser, tanpa instalasi dependensi, dan dapat diakses langsung oleh siapa saja.
 
