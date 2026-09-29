@@ -116,44 +116,44 @@ function updateStripDownloadAvailability() {
 }
 
 const STRIP_FRAME = new Image();
-STRIP_FRAME.src = "./frame_strip.png";
+STRIP_FRAME.src = "./Asset/frame_strip.png";
 const STRIP_PHOTO_SLOTS = [
   { x: 97, y: 118, width: 391, height: 391 },
   { x: 102, y: 601, width: 391, height: 391 },
   { x: 102, y: 1077, width: 391, height: 391 },
 ];
 
-async function downloadPhotoStrip() {
+function downloadPhotoStrip() {
   if (galleryEntries.length === 0) return;
 
-  try {
-    await STRIP_FRAME.decode();
-  } catch {
-    statusText.textContent = "Bingkai strip tidak dapat dimuat";
-    return;
+  const stripCanvas = document.createElement("canvas");
+  const frameReady = STRIP_FRAME.complete && STRIP_FRAME.naturalWidth > 0;
+  stripCanvas.width = frameReady ? STRIP_FRAME.naturalWidth : 591;
+  stripCanvas.height = frameReady ? STRIP_FRAME.naturalHeight : 1772;
+  const stripCtx = stripCanvas.getContext("2d");
+  if (frameReady) {
+    stripCtx.drawImage(STRIP_FRAME, 0, 0);
+  } else {
+    stripCtx.fillStyle = "#ffffff";
+    stripCtx.fillRect(0, 0, stripCanvas.width, stripCanvas.height);
+    statusText.textContent = "Bingkai tidak tersedia; strip foto diunduh tanpa bingkai";
   }
 
-  const stripCanvas = document.createElement("canvas");
-  stripCanvas.width = STRIP_FRAME.naturalWidth;
-  stripCanvas.height = STRIP_FRAME.naturalHeight;
-  const stripCtx = stripCanvas.getContext("2d");
-  stripCtx.drawImage(STRIP_FRAME, 0, 0);
   galleryEntries.forEach((entry, index) => {
     const slot = STRIP_PHOTO_SLOTS[index];
     stripCtx.drawImage(entry.canvas, slot.x, slot.y, slot.width, slot.height);
   });
 
-  stripCanvas.toBlob((blob) => {
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
+  try {
     const link = document.createElement("a");
-    link.href = url;
+    link.href = stripCanvas.toDataURL("image/png");
     link.download = `puzzlecam_strip_${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(url), 4000);
-  }, "image/png");
+  } catch (error) {
+    statusText.textContent = `Gagal membuat strip foto: ${error.message}`;
+  }
 }
 
 function resetEverything() {
